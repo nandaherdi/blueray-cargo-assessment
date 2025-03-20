@@ -47,7 +47,7 @@ class RegisterMandatoryModel {
         idCardName: json["idCardName"]
       );
 
-  Map<String, Object> toJson() => {
+  Map<String, dynamic> toJson() => {
         "user_id": userId,
         "firstName": firstName,
         "lastName": lastName,

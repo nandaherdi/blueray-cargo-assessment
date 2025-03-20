@@ -23,7 +23,7 @@ class RegisterMiniModel {
         userId: json["user_id"]
       );
 
-  Map<String, Object> toJson() => {
+  Map<String, dynamic> toJson() => {
         "user_id": userId
       };
 }

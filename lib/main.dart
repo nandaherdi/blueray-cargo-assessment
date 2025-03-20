@@ -1,7 +1,16 @@
+import 'package:blueray_cargo_assessment/global.dart';
+import 'package:blueray_cargo_assessment/view_models/global_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GlobalViewModel())
+      ],
+      child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      navigatorKey: navigatorKey,
     );
   }
 }

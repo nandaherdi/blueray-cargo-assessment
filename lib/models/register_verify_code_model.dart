@@ -26,7 +26,7 @@ class RegisterVerifyCodeModel {
         code: json["code"]
       );
 
-  Map<String, Object> toJson() => {
+  Map<String, dynamic> toJson() => {
         "user_id": userId,
         "code": code
       };
