@@ -65,16 +65,20 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 hintText: "Nomor Telepon"
               ),
             ),
-            TextFormField(
-              controller: _passwordController,
-              obscureText: registerProvider.isPasswordVisible,
-              decoration: InputDecoration(
-                hintText: "Password",
-                suffixIcon: IconButton(
-                  onPressed: () => registerProvider.setPasswordVisibility = registerProvider.isPasswordVisible ? false : true,
-                  icon: Icon(registerProvider.isPasswordVisible ? Icons.visibility : Icons.visibility_off)
-                )
-              ),
+            Consumer<RegisterViewModel>(
+              builder: (context, registerProvider, child) {
+                return TextFormField(
+                  controller: _passwordController,
+                  obscureText: registerProvider.isPasswordVisible,
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    suffixIcon: IconButton(
+                      onPressed: () => registerProvider.setPasswordVisibility = registerProvider.isPasswordVisible ? false : true,
+                      icon: Icon(registerProvider.isPasswordVisible ? Icons.visibility : Icons.visibility_off)
+                    )
+                  ),
+                );
+              }
             ),
             TextFormField(
               controller: _idCardNumberController,
