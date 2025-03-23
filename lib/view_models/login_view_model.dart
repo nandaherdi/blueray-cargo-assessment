@@ -10,7 +10,7 @@ class LoginViewModel with ChangeNotifier {
 
   bool get isPasswordVisible => _isPasswordVisible;
 
-  set setPasswordVisibility(bool newValue) {
+  set isPasswordVisible(bool newValue) {
     _isPasswordVisible = newValue;
     notifyListeners();
   }

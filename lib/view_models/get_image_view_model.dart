@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:blueray_cargo_assessment/global.dart';
+import 'package:blueray_cargo_assessment/view_models/register_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class GetImageViewModel with ChangeNotifier {
@@ -32,7 +34,10 @@ class GetImageViewModel with ChangeNotifier {
           ),
           bottomNavigationBar: BottomAppBar(
             child: OutlinedButton(
-              onPressed: showSelectImageSourceDialog,
+              onPressed: () {
+                Navigator.of(context).pop();
+                showSelectImageSourceDialog();
+              },
               child: Text("ganti gambar")
             ),
           ),
@@ -65,6 +70,8 @@ class GetImageViewModel with ChangeNotifier {
   getImageFromCamera() {
     showCheckingCameraPermissionDialog();
     checkCameraPermission().then((bool isGranted) async {
+      Navigator.of(navigatorKey.currentContext!).pop();
+      Navigator.of(navigatorKey.currentContext!).pop();
       if (!isGranted) {
         showCameraPermissionSettingsDialog();
       } else {
@@ -75,6 +82,7 @@ class GetImageViewModel with ChangeNotifier {
   }
 
   getImageFromGallery() async {
+    Navigator.of(navigatorKey.currentContext!).pop();
     ImagePicker picker = ImagePicker();
     XFile? photo = await picker.pickImage(
       source: ImageSource.gallery,
@@ -168,9 +176,9 @@ class GetImageViewModel with ChangeNotifier {
       imageQuality: 50
     );
     if (photo != null) {
-      String fileName = '${Uuid().v1()}.jpg';
-      await photo.saveTo('$appSupportDirectory/$fileName');
-      await File(photo.path).delete();
+      // String fileName = '${Uuid().v1()}.jpg';
+      // await photo.saveTo('${appSupportDirectory.path}/$fileName');
+      // await File(photo.path).delete();
     }
     return photo;
   }

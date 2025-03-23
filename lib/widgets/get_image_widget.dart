@@ -14,15 +14,20 @@ class GetImageWidget extends StatefulWidget {
 class _GetImageWidgetState extends State<GetImageWidget> {
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(15)),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
       child: Consumer<GetImageViewModel>(
         builder: (context, getImageProvider, child) {
           return InkWell(
-            onTap: getImageProvider.tempImage == null
+            onTap: getImageProvider.tempImage != null
               ? () => getImageProvider.showImage()
               : () => getImageProvider.showSelectImageSourceDialog(),
-            child: getImageProvider.tempImage == null
+            child: getImageProvider.tempImage != null
               ? Image.file(
                 File(getImageProvider.tempImage!),
                 fit: BoxFit.cover,

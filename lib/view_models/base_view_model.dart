@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:blueray_cargo_assessment/global.dart';
+import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BaseViewModel with ChangeNotifier {
   String? _authToken;
@@ -8,7 +12,7 @@ class BaseViewModel with ChangeNotifier {
   String? get authToken => _authToken;
   String get accessToken => _accessToken;
 
-  void setAuthToken(String newValue) {
+  set authToken(String? newValue) {
     _authToken = newValue;
     notifyListeners();
   }
@@ -35,7 +39,7 @@ class BaseViewModel with ChangeNotifier {
           content: Text(message),
           actions: [
             ElevatedButton(
-              onPressed: () => action,
+              onPressed: () => action(),
               child: Text(buttonText)
             )
           ],
@@ -50,5 +54,22 @@ class BaseViewModel with ChangeNotifier {
       ..hideCurrentSnackBar()
       ..clearSnackBars()
       ..showSnackBar(snackBar);
+  }
+
+  void showErrorSnackBar(String message) {
+    final SnackBar snackBar = SnackBar(content: Text(message), backgroundColor: Colors.red,);
+
+    ScaffoldMessenger.of(navigatorKey.currentContext!)
+      ..hideCurrentSnackBar()
+      ..clearSnackBars()
+      ..showSnackBar(snackBar);
+  }
+
+  bool isImageExists() {
+    var getImageProvider = navigatorKey.currentContext!.read<GetImageViewModel>();
+    if (getImageProvider.tempImage != null && File(getImageProvider.tempImage!).existsSync()) {
+      return true;
+    }
+    return false;
   }
 }

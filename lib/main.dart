@@ -2,6 +2,7 @@ import 'package:blueray_cargo_assessment/global.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/register_view_model.dart';
+import 'package:blueray_cargo_assessment/views/register_form_page.dart';
 import 'package:blueray_cargo_assessment/views/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,9 +27,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const RegisterPage(),
+      home: const RegisterFormPage(email: 'maselon@space.com',),
+      // home: const RegisterPage(),
       navigatorKey: navigatorKey,
     );
   }

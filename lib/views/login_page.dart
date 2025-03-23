@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     hintText: "Password",
                     suffixIcon: IconButton(
-                      onPressed: () => loginProvider.setPasswordVisibility = loginProvider.isPasswordVisible ? false : true,
+                      onPressed: () => loginProvider.isPasswordVisible = loginProvider.isPasswordVisible ? false : true,
                       icon: Icon(loginProvider.isPasswordVisible ? Icons.visibility : Icons.visibility_off)
                     )
                   ),
@@ -55,7 +55,8 @@ class _LoginPageState extends State<LoginPage> {
               }
             ),
             ElevatedButton(
-              onPressed: ()=> loginProvider.checkEmail(_emailController.text),
+              onPressed: null,
+              // onPressed: ()=> loginProvider.checkEmail(_emailController.text),
               child: Text("Masuk")
             ),
             Text("Dengan mendaftar anda telah menyetujui"),
