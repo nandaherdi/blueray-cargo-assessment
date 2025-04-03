@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:blueray_cargo_assessment/global.dart';
-import 'package:blueray_cargo_assessment/view_models/register_view_model.dart';
+import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 
 class GetImageViewModel with ChangeNotifier {
   String? _tempImage;
-  
+
   String? get tempImage => _tempImage;
 
   set tempImage(String? newValue) {
@@ -29,20 +29,19 @@ class GetImageViewModel with ChangeNotifier {
       context: navigatorKey.currentContext!,
       builder: (context) {
         return Scaffold(
-          body: Center(
-            child: Image.file(File(tempImage!)),
-          ),
+          body: Center(child: Image.file(File(tempImage!))),
           bottomNavigationBar: BottomAppBar(
             child: OutlinedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 showSelectImageSourceDialog();
               },
-              child: Text("ganti gambar")
+              child: Text("ganti gambar"),
             ),
           ),
         );
-      });
+      },
+    );
   }
 
   showSelectImageSourceDialog() {
@@ -53,17 +52,11 @@ class GetImageViewModel with ChangeNotifier {
         return SimpleDialog(
           title: Text("Pilih Sumber Gambar"),
           children: [
-            SimpleDialogOption(
-              onPressed: getImageFromCamera,
-              child: Text("Kamera"),
-            ),
-            SimpleDialogOption(
-              onPressed: getImageFromGallery,
-              child: Text("Galeri"),
-            )
+            SimpleDialogOption(onPressed: getImageFromCamera, child: Text("Kamera")),
+            SimpleDialogOption(onPressed: getImageFromGallery, child: Text("Galeri")),
           ],
         );
-      }
+      },
     );
   }
 
@@ -84,10 +77,7 @@ class GetImageViewModel with ChangeNotifier {
   getImageFromGallery() async {
     Navigator.of(navigatorKey.currentContext!).pop();
     ImagePicker picker = ImagePicker();
-    XFile? photo = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50
-    );
+    XFile? photo = await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     tempImage = photo?.path;
   }
 
@@ -103,17 +93,14 @@ class GetImageViewModel with ChangeNotifier {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Checking camera usage permission..."),
-              SizedBox(
-                height: 15,
-              ),
+              SizedBox(height: 15),
               LinearProgressIndicator(),
-              SizedBox(
-                height: 15,
-              )
+              SizedBox(height: 15),
             ],
           ),
         );
-      });
+      },
+    );
   }
 
   Future<bool> checkCameraPermission() async {
@@ -153,28 +140,29 @@ class GetImageViewModel with ChangeNotifier {
       builder: (context) {
         return AlertDialog(
           title: const Text("Akses Kamera Dibutuhkan"),
-          content: const Text("Aplikasi ini membutuhkan akses ke kamera. Jika tetap ingin menggunakan fitur ini, tolong kunjungi setting dan izinkan penggunaan kamera."),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    await openAppSettings().then((_) {
-                      getImageFromCamera();
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Go to Settings"))
-            ],
-          );
-        });
+          content: const Text(
+            "Aplikasi ini membutuhkan akses ke kamera. Jika tetap ingin menggunakan fitur ini, tolong kunjungi setting dan izinkan penggunaan kamera.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await openAppSettings().then((_) {
+                  getImageFromCamera();
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text("Go to Settings"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<XFile?> useCamera() async {
     final Directory appSupportDirectory = await getApplicationSupportDirectory();
     ImagePicker picker = ImagePicker();
-    XFile? photo = await picker.pickImage(
-      source: ImageSource.camera,
-      imageQuality: 50
-    );
+    XFile? photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (photo != null) {
       // String fileName = '${Uuid().v1()}.jpg';
       // await photo.saveTo('${appSupportDirectory.path}/$fileName');
@@ -182,5 +170,4 @@ class GetImageViewModel with ChangeNotifier {
     }
     return photo;
   }
-  
 }

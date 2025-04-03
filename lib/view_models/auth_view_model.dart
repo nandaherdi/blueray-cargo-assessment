@@ -5,7 +5,9 @@ import 'package:blueray_cargo_assessment/models/register_mandatory_model.dart';
 import 'package:blueray_cargo_assessment/models/register_mini_model.dart';
 import 'package:blueray_cargo_assessment/models/register_resend_code_model.dart';
 import 'package:blueray_cargo_assessment/models/register_verify_code_model.dart';
+import 'package:blueray_cargo_assessment/models/requests/login_request_model.dart';
 import 'package:blueray_cargo_assessment/models/response_model.dart';
+import 'package:blueray_cargo_assessment/services/auth_service.dart';
 import 'package:blueray_cargo_assessment/services/base_service.dart';
 import 'package:blueray_cargo_assessment/services/register_service.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
@@ -15,19 +17,40 @@ import 'package:blueray_cargo_assessment/views/verify_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterViewModel with ChangeNotifier {
+class AuthViewModel with ChangeNotifier {
   var baseProvider = navigatorKey.currentContext!.read<BaseViewModel>();
 
-  bool _isPasswordVisible = false;
+  bool _isRegisterPasswordVisible = false;
+  bool _isLoginPasswordVisible = false;
+  bool _isEmailValid = false;
+  bool _isLoginFormValid = false;
   // bool _isFormValid = false;
   // bool _isDataReady = false;
 
-  bool get isPasswordVisible => _isPasswordVisible;
+  bool get isRegisterPasswordVisible => _isRegisterPasswordVisible;
+  bool get isLoginPasswordVisible => _isLoginPasswordVisible;
+  bool get isEmailValid => _isEmailValid;
+  bool get isLoginFormValid => _isLoginFormValid;
   // bool get isFormValid => _isFormValid;
   // bool get isDataReady => _isDataReady;
 
-  set isPasswordVisible(bool newValue) {
-    _isPasswordVisible = newValue;
+  set isRegisterPasswordVisible(bool newValue) {
+    _isRegisterPasswordVisible = newValue;
+    notifyListeners();
+  }
+
+  set isLoginPasswordVisible(bool newValue) {
+    _isLoginPasswordVisible = newValue;
+    notifyListeners();
+  }
+
+  set isEmailValid(bool newValue) {
+    _isEmailValid = newValue;
+    notifyListeners();
+  }
+
+  set isLoginFormValid(bool newValue) {
+    _isLoginFormValid = newValue;
     notifyListeners();
   }
   // set isFormValid(bool newValue) {
@@ -45,8 +68,8 @@ class RegisterViewModel with ChangeNotifier {
     if (response.action) {
       Navigator.push(
         navigatorKey.currentContext!,
-        MaterialPageRoute(
-          builder: (BuildContext context) => VerifyPage(email: email)));
+        MaterialPageRoute(builder: (BuildContext context) => VerifyPage(email: email)),
+      );
     } else {
       baseProvider.showErrorDialog(response.message);
     }
@@ -58,8 +81,8 @@ class RegisterViewModel with ChangeNotifier {
     if (response.action) {
       Navigator.pushReplacement(
         navigatorKey.currentContext!,
-        MaterialPageRoute(
-          builder: (BuildContext context) => RegisterFormPage(email: email,)));
+        MaterialPageRoute(builder: (BuildContext context) => RegisterFormPage(email: email)),
+      );
     } else {
       baseProvider.showErrorDialog(response.message);
     }
@@ -80,13 +103,13 @@ class RegisterViewModel with ChangeNotifier {
           baseProvider.showSingleActionDialog(
             title: "Pendaftaran Berhasil",
             message: "Pendaftaran telah selesai, silahkan login untuk melanjutkan.",
-            action: (){
+            action: () {
               // Navigator.pushReplacement(
               //   navigatorKey.currentContext!,
               //   MaterialPageRoute(
               //     builder: (BuildContext context) => LoginPage()));
             },
-            buttonText: "Masuk"
+            buttonText: "Masuk",
           );
         } else {
           baseProvider.showErrorDialog(saveDataResponse.message);
@@ -101,7 +124,7 @@ class RegisterViewModel with ChangeNotifier {
     return int.tryParse(s) == null ? false : true;
   }
 
-  String? validatePhoneNumber(String? phoneNumber){
+  String? validatePhoneNumber(String? phoneNumber) {
     if (phoneNumber == null) {
       return null;
     } else if (phoneNumber == '') {
@@ -118,7 +141,7 @@ class RegisterViewModel with ChangeNotifier {
     return null;
   }
 
-  String? validateName(String? name){
+  String? validateName(String? name) {
     if (name == null) {
       return null;
     } else if (name == '') {
@@ -131,22 +154,34 @@ class RegisterViewModel with ChangeNotifier {
     return null;
   }
 
-  String? validatePassword(String? password){
+  String? validateEmail(String? email) {
+    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    if (email == null) {
+      return null;
+    } else if (email == '') {
+      return 'tolong isi email';
+    } else if (!regex.hasMatch(email)) {
+      return 'email tidak valid';
+    }
+    return null;
+  }
+
+  String? validatePassword(String? password) {
     if (password == null) {
       return null;
-    } else if (password.isEmpty){
+    } else if (password.isEmpty) {
       return 'password tidak boleh kosong';
-    } else if (RegExp(r"\s").hasMatch(password)){
+    } else if (RegExp(r"\s").hasMatch(password)) {
       return 'password tidak boleh mengandung spasi';
-    } else if(!(RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{0,}$').hasMatch(password))){
+    } else if (!(RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{0,}$').hasMatch(password))) {
       return 'password harus mengandung huruf besar, huruf kecil, angka, dan simbol';
-    } else if (password.length < 8){
+    } else if (password.length < 8) {
       return 'password minimal 8 karakter';
     }
     return null;
   }
 
-  String? validateIdCardNumber(String? idCardNumber){
+  String? validateIdCardNumber(String? idCardNumber) {
     if (idCardNumber == null) {
       return null;
     } else if (idCardNumber == '') {
@@ -157,11 +192,11 @@ class RegisterViewModel with ChangeNotifier {
       return 'nomor KTPs hanya boleh diisi angka';
     } else if (idCardNumber.length != 16) {
       return 'nomor KTP harus 16 digit';
-    } 
+    }
     return null;
   }
 
-  String? validateIdCardName(String? idCardName){
+  String? validateIdCardName(String? idCardName) {
     if (idCardName == null) {
       return null;
     } else if (idCardName == '') {
@@ -174,7 +209,7 @@ class RegisterViewModel with ChangeNotifier {
     return null;
   }
 
-  String? validateIdCardAddress(String? idCardAddress){
+  String? validateIdCardAddress(String? idCardAddress) {
     if (idCardAddress == null) {
       return null;
     } else if (idCardAddress == '') {
@@ -194,12 +229,33 @@ class RegisterViewModel with ChangeNotifier {
         title: "Cek Ulang",
         message: "Anda yakin ingin menyimpan data ini?",
         action: () async => await saveRegisterData(requestData),
-        buttonText: "Simpan"
+        buttonText: "Simpan",
       );
     } else {
       baseProvider.showErrorSnackBar("Tolong isi semua data dengan lengkap");
     }
   }
 
-  
+  void checkEmailValidity(GlobalKey<FormState> formKey) {
+    if (formKey.currentState?.validate() == true) {
+      isEmailValid = true;
+    } else {
+      isEmailValid = false;
+    }
+  }
+
+  void checkLoginFormValidity(GlobalKey<FormState> formKey) {
+    if (formKey.currentState?.validate() == true) {
+      isLoginFormValid = true;
+    } else {
+      isLoginFormValid = false;
+    }
+  }
+
+  doLogin(LoginRequestModel requestData, GlobalKey<FormState> formKey) async {
+    if (formKey.currentState?.validate() == false) {
+      throw "Tolong isi data login dengan benar";
+    }
+    await AuthService.login(requestData: requestData);
+  }
 }

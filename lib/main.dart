@@ -1,7 +1,8 @@
 import 'package:blueray_cargo_assessment/global.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
-import 'package:blueray_cargo_assessment/view_models/register_view_model.dart';
+import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
+import 'package:blueray_cargo_assessment/views/login_page.dart';
 import 'package:blueray_cargo_assessment/views/register_form_page.dart';
 import 'package:blueray_cargo_assessment/views/register_page.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,11 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => BaseViewModel()),
         ChangeNotifierProvider(create: (context) => GetImageViewModel()),
-        ChangeNotifierProvider(create: (context) => RegisterViewModel())
+        ChangeNotifierProvider(create: (context) => AuthViewModel()),
       ],
       child: MyApp(),
-  ));
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,11 +27,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      ),
-      home: const RegisterFormPage(email: 'maselon@space.com',),
+      title: 'Blueray Cargo App',
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
+      home: const LoginPage(),
       // home: const RegisterPage(),
       navigatorKey: navigatorKey,
     );

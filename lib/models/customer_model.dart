@@ -8,10 +8,7 @@ import 'dart:convert';
 
 CustomerModel customerModelFromJson(String str) => CustomerModel.fromJson(json.decode(str));
 
-
-String customerModelToJson(
-        CustomerModel data) =>
-    json.encode(data.toJson());
+String customerModelToJson(CustomerModel data) => json.encode(data.toJson());
 
 class CustomerModel {
   CustomerModel({
@@ -22,39 +19,37 @@ class CustomerModel {
     required this.phoneNumber,
     this.gender,
     this.birthPlace,
-    this.birthday
+    this.birthday,
   });
 
   int customerId;
   String email;
   String firstName;
   String lastName;
-  String phoneNumber;
+  String? phoneNumber;
   String? gender;
   String? birthPlace;
   String? birthday;
 
-  factory CustomerModel.fromJson(
-          Map<String, dynamic> json) =>
-      CustomerModel(
-        customerId: json["customerId"],
-        email: json["email"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        phoneNumber: json["phoneNumber"],
-        gender: json["gender"],
-        birthPlace: json["birthPlace"],
-        birthday: json["birthday"]
-      );
+  factory CustomerModel.fromJson(Map<String, dynamic> json) => CustomerModel(
+    customerId: json["customer_id"],
+    email: json["email"],
+    firstName: json["first_name"],
+    lastName: json["last_name"],
+    phoneNumber: json["phone_number"],
+    gender: json["gender"],
+    birthPlace: json["birth_place"],
+    birthday: json["birthday"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "customerId": customerId,
-        "email": email,
-        "firstName": firstName,
-        "lastName": lastName,
-        "phoneNumber": phoneNumber,
-        "gender": gender,
-        "birthPlace": birthPlace,
-        "birthday": birthday
-      };
+    "customer_id": customerId,
+    "email": email,
+    "first_name": firstName,
+    "last_name": lastName,
+    "phone_number": phoneNumber,
+    "gender": gender,
+    "birth_place": birthPlace,
+    "birthday": birthday,
+  };
 }

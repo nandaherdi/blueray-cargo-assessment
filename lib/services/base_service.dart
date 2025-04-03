@@ -8,18 +8,62 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class BaseService {
-  static Future<ResponseModel> postData({required String path, required String valueKey, required String statusCodeKey, required Object requestData}) async {
-    final authToken = navigatorKey.currentContext!.read<BaseViewModel>().authToken;
-    final accessToken = navigatorKey.currentContext!.read<BaseViewModel>().accessToken;
+  static Future<http.Response> post({
+    required String path,
+    // required String valueKey,
+    // required String statusCodeKey,
+    required Object requestData,
+  }) async {
+    final authToken =
+        navigatorKey.currentContext!.read<BaseViewModel>().authToken;
+    final accessToken =
+        navigatorKey.currentContext!.read<BaseViewModel>().accessToken;
+    var url = Uri.parse("$dataServiceRoot/$path");
+    var response = await http.post(
+      url,
+      headers: {
+        "Authorization": authToken ?? "",
+        "AccessToken": accessToken,
+        "Content-Type": "application/json; charset=UTF-8",
+        "Accept": "application/json",
+      },
+      body: requestData,
+    );
+    return response;
+  }
+
+  static Future<ResponseModel> postData({
+    required String path,
+    required String valueKey,
+    required String statusCodeKey,
+    required Object requestData,
+  }) async {
+    final authToken =
+        navigatorKey.currentContext!.read<BaseViewModel>().authToken;
+    final accessToken =
+        navigatorKey.currentContext!.read<BaseViewModel>().accessToken;
     try {
       var url = Uri.parse("$dataServiceRoot/$path");
-      var response = await http.post(url, headers: {"Authorization": authToken ?? "", "AccessToken": accessToken, "Content-Type": "application/json; charset=UTF-8", "Accept": "application/json"}, body: requestData);
+      var response = await http.post(
+        url,
+        headers: {
+          "Authorization": authToken ?? "",
+          "AccessToken": accessToken,
+          "Content-Type": "application/json; charset=UTF-8",
+          "Accept": "application/json",
+        },
+        body: requestData,
+      );
       // var responseBody = responseModelFromJson(response.body, valueKey);
-      var responseBody = responseModelFromJson(response.body, valueKey, statusCodeKey);
+      var responseBody = responseModelFromJson(
+        response.body,
+        valueKey,
+        statusCodeKey,
+      );
       // if (ResponseCodeApi.successResponCode.contains(response.statusCode)) {
-        responseBody.code = responseBody.code ?? response.statusCode;
-        return responseBody;
-        // return ResponseModel(code: response.statusCode, action: responseBody.first.action, message: responseBody.first.message, value: responseBody.first.value);
+      responseBody.code = responseBody.code ?? response.statusCode;
+      return responseBody;
+      // return ResponseModel(code: response.statusCode, action: responseBody.first.action, message: responseBody.first.message, value: responseBody.first.value);
       // }
       // return ResponseModel(code: response.statusCode, isResponseFailure: true, responseMessage: response.reasonPhrase ?? "Unknown Error Response");
     } on SocketException catch (e) {
@@ -58,7 +102,11 @@ class BaseService {
 
       var streamResponse = await http.Response.fromStream(response);
 
-      var responseBody = responseModelFromJson(streamResponse.body, "image_url", "");
+      var responseBody = responseModelFromJson(
+        streamResponse.body,
+        "image_url",
+        "",
+      );
       responseBody.code = responseBody.code ?? response.statusCode;
       return responseBody;
       // if (response.statusCode == ResponseCodeAPI.SuccessResponCode) {
