@@ -17,29 +17,29 @@ class CustomerModel {
     required this.firstName,
     required this.lastName,
     required this.phoneNumber,
-    this.gender,
-    this.birthPlace,
-    this.birthday,
+    required this.gender,
+    required this.birthPlace,
+    required this.birthday,
   });
 
   int customerId;
   String email;
   String firstName;
   String lastName;
-  String? phoneNumber;
-  String? gender;
-  String? birthPlace;
-  String? birthday;
+  String phoneNumber;
+  String gender;
+  String birthPlace;
+  String birthday;
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) => CustomerModel(
     customerId: json["customer_id"],
     email: json["email"],
     firstName: json["first_name"],
     lastName: json["last_name"],
-    phoneNumber: json["phone_number"],
-    gender: json["gender"],
-    birthPlace: json["birth_place"],
-    birthday: json["birthday"],
+    phoneNumber: json["phone_number"] ?? "-",
+    gender: json["gender"] ?? "-",
+    birthPlace: json["birth_place"] ?? "-",
+    birthday: json["birthday"] ?? "-",
   );
 
   Map<String, dynamic> toJson() => {

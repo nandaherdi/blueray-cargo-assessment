@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:blueray_cargo_assessment/global.dart';
+import 'package:blueray_cargo_assessment/models/authorization_model.dart';
+import 'package:blueray_cargo_assessment/models/customer_model.dart';
 import 'package:blueray_cargo_assessment/models/register_mandatory_model.dart';
 import 'package:blueray_cargo_assessment/models/register_mini_model.dart';
 import 'package:blueray_cargo_assessment/models/register_resend_code_model.dart';
@@ -8,7 +10,9 @@ import 'package:blueray_cargo_assessment/models/register_verify_code_model.dart'
 import 'package:blueray_cargo_assessment/models/requests/login_request_model.dart';
 import 'package:blueray_cargo_assessment/models/response_model.dart';
 import 'package:blueray_cargo_assessment/services/auth_service.dart';
+import 'package:blueray_cargo_assessment/services/auth_table_provider.dart';
 import 'package:blueray_cargo_assessment/services/base_service.dart';
+import 'package:blueray_cargo_assessment/services/customer_table_provider.dart';
 import 'package:blueray_cargo_assessment/services/register_service.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
@@ -256,6 +260,14 @@ class AuthViewModel with ChangeNotifier {
     if (formKey.currentState?.validate() == false) {
       throw "Tolong isi data login dengan benar";
     }
-    await AuthService.login(requestData: requestData);
+    var response = await AuthService.login(requestData: requestData);
+    AuthorizationTableProvider authTableProvider = AuthorizationTableProvider();
+    CustomerTableProvider customerTableProvider = CustomerTableProvider();
+    AuthorizationModel authData = AuthorizationModel(
+      token: response.token!,
+      tokenExpiryDate: response.tokenExpiryDate!,
+    );
+    await authTableProvider.insertData(authData);
+    await customerTableProvider.insertData(response.customer!);
   }
 }

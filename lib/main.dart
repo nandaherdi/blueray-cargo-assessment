@@ -2,18 +2,22 @@ import 'package:blueray_cargo_assessment/global.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
+import 'package:blueray_cargo_assessment/view_models/home_view_model.dart';
+import 'package:blueray_cargo_assessment/views/home_page.dart';
 import 'package:blueray_cargo_assessment/views/login_page.dart';
-import 'package:blueray_cargo_assessment/views/register_form_page.dart';
-import 'package:blueray_cargo_assessment/views/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  BaseViewModel baseViewModel = BaseViewModel();
+  await baseViewModel.onLaunch();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BaseViewModel()),
         ChangeNotifierProvider(create: (context) => GetImageViewModel()),
+        ChangeNotifierProvider(create: (context) => HomeViewModel()),
         ChangeNotifierProvider(create: (context) => AuthViewModel()),
       ],
       child: MyApp(),
@@ -26,11 +30,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget startPage;
+    if (isLoggedIn == true) {
+      startPage = HomePage();
+    } else {
+      startPage = LoginPage();
+    }
     return MaterialApp(
       title: 'Blueray Cargo App',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
-      home: const LoginPage(),
-      // home: const RegisterPage(),
+      home: startPage,
       navigatorKey: navigatorKey,
     );
   }

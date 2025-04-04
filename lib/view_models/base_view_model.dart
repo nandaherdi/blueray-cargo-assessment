@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:blueray_cargo_assessment/global.dart';
 import 'package:blueray_cargo_assessment/models/dialog_foreground_process_model.dart';
-import 'package:blueray_cargo_assessment/utilities/lookup_utility.dart';
+import 'package:blueray_cargo_assessment/services/auth_table_provider.dart';
+import 'package:blueray_cargo_assessment/services/customer_table_provider.dart';
+import 'package:blueray_cargo_assessment/services/db_context.dart';
 import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
+import 'package:blueray_cargo_assessment/view_models/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -128,5 +131,20 @@ class BaseViewModel with ChangeNotifier {
         );
       },
     );
+  }
+
+  Future<void> onLaunch() async {
+    AuthorizationTableProvider authTableProvider = AuthorizationTableProvider();
+    await DbContext.instance.database;
+    var authData = await authTableProvider.getData();
+    if (authData.isEmpty) {
+      isLoggedIn = false;
+    } else {
+      if (authData.first.tokenExpiryDate.compareTo(DateTime.now()) == -1) {
+        isLoggedIn = false;
+      } else {
+        isLoggedIn = true;
+      }
+    }
   }
 }
