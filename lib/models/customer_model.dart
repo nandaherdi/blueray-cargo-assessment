@@ -20,6 +20,7 @@ class CustomerModel {
     required this.gender,
     required this.birthPlace,
     required this.birthday,
+    required this.avatar,
   });
 
   int customerId;
@@ -30,6 +31,7 @@ class CustomerModel {
   String gender;
   String birthPlace;
   String birthday;
+  String avatar;
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) => CustomerModel(
     customerId: json["customer_id"],
@@ -40,6 +42,7 @@ class CustomerModel {
     gender: json["gender"] ?? "-",
     birthPlace: json["birth_place"] ?? "-",
     birthday: json["birthday"] ?? "-",
+    avatar: json["avatar"] ?? "-",
   );
 
   Map<String, dynamic> toJson() => {
@@ -51,5 +54,6 @@ class CustomerModel {
     "gender": gender,
     "birth_place": birthPlace,
     "birthday": birthday,
+    "avatar": avatar,
   };
 }

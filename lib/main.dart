@@ -1,5 +1,6 @@
 import 'package:blueray_cargo_assessment/global.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
+import 'package:blueray_cargo_assessment/view_models/customer_address_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/home_view_model.dart';
@@ -16,6 +17,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BaseViewModel()),
+        ChangeNotifierProvider(create: (context) => CustomerAddressViewModel()),
         ChangeNotifierProvider(create: (context) => GetImageViewModel()),
         ChangeNotifierProvider(create: (context) => HomeViewModel()),
         ChangeNotifierProvider(create: (context) => AuthViewModel()),

@@ -40,8 +40,13 @@ class CustomerTableProvider {
         gender: maps[index]['gender'],
         birthPlace: maps[index]['birth_place'],
         birthday: maps[index]['birthday'],
+        avatar: maps[index]['avatar'],
       );
     });
+
+    // return List.generate(maps.length, (index) {
+    //   return customerModelFromJson(maps[index].toString());
+    // });
   }
 
   Future<String> insertData(CustomerModel customerData) async {

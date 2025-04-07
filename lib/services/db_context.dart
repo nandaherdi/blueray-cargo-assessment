@@ -40,7 +40,8 @@ class DbContext {
         phone_number       TEXT,
         gender             TEXT,
         birth_place        TEXT,
-        birthday           TEXT
+        birthday           TEXT,
+        avatar             TEXT
       )
     ''');
   }

@@ -1,6 +1,7 @@
 import 'package:blueray_cargo_assessment/global.dart';
 import 'package:blueray_cargo_assessment/models/customer_model.dart';
 import 'package:blueray_cargo_assessment/view_models/home_view_model.dart';
+import 'package:blueray_cargo_assessment/views/address_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -35,6 +36,24 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Container(
+                  //   height: 50,
+                  //   width: 50,
+                  //   decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50))),
+                  //   child:
+                  //       homeProvider.customer == null
+                  //           ? SizedBox()
+                  //           : Image.network(
+                  //             homeProvider.customer!.avatar,
+                  //             errorBuilder: (context, error, stackTrace) {
+                  //               return Icon(Icons.person);
+                  //             },
+                  //           ),
+                  // ),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: homeProvider.customer == null ? null : NetworkImage(homeProvider.customer!.avatar),
+                  ),
                   Text(homeProvider.customer == null ? "getting data to show" : homeProvider.customer!.email),
                   Text(homeProvider.customer == null ? "getting data to show" : homeProvider.customer!.firstName),
                   Text(homeProvider.customer == null ? "getting data to show" : homeProvider.customer!.lastName),
@@ -42,6 +61,15 @@ class _HomePageState extends State<HomePage> {
                   Text(homeProvider.customer == null ? "getting data to show" : homeProvider.customer!.birthday),
                   Text(homeProvider.customer == null ? "getting data to show" : homeProvider.customer!.gender),
                   Text(homeProvider.customer == null ? "getting data to show" : homeProvider.customer!.phoneNumber),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        navigatorKey.currentContext!,
+                        MaterialPageRoute(builder: (BuildContext context) => AddressPage()),
+                      );
+                    },
+                    icon: Icon(Icons.map_sharp),
+                  ),
                 ],
               ),
             );

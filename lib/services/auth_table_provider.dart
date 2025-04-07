@@ -50,6 +50,10 @@ class AuthorizationTableProvider {
         tokenExpiryDate: DateTime.parse(maps[index]['token_expiry_date']),
       );
     });
+
+    // return List.generate(maps.length, (index) {
+    //   return authorizationModelFromJson(maps[index].toString());
+    // });
   }
 
   Future<String> insertData(AuthorizationModel authData) async {

@@ -9,6 +9,7 @@ import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:blueray_cargo_assessment/global.dart' as global;
 
 class BaseViewModel with ChangeNotifier {
   String? _authToken;
@@ -78,10 +79,18 @@ class BaseViewModel with ChangeNotifier {
     return false;
   }
 
-  dialogForegroundProcess(Function process, DialogForegroundProcessModel dialogData) {
+  shimmerForegroundProcess(Function process) async {
+    try {
+      await process();
+    } catch (e) {
+      showErrorDialog(e.toString());
+    }
+  }
+
+  dialogForegroundProcess(Function process, DialogForegroundProcessModel dialogData) async {
     showLoadingDialog();
     try {
-      process;
+      await process();
       Navigator.of(navigatorKey.currentContext!).pop();
       showSingleActionDialog(
         title: dialogData.title,
@@ -143,6 +152,7 @@ class BaseViewModel with ChangeNotifier {
       if (authData.first.tokenExpiryDate.compareTo(DateTime.now()) == -1) {
         isLoggedIn = false;
       } else {
+        global.authToken = authData.first.token;
         isLoggedIn = true;
       }
     }
