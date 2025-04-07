@@ -1,6 +1,8 @@
 import 'package:blueray_cargo_assessment/global.dart';
+import 'package:blueray_cargo_assessment/models/requests/add_address_model.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/customer_address_view_model.dart';
+import 'package:blueray_cargo_assessment/views/add_address_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -26,7 +28,20 @@ class _AddressPageState extends State<AddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Address'), actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))]),
+      appBar: AppBar(
+        title: Text('Address'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                navigatorKey.currentContext!,
+                MaterialPageRoute(builder: (BuildContext context) => AddAddressFormPage()),
+              );
+            },
+            icon: Icon(Icons.add),
+          ),
+        ],
+      ),
       backgroundColor: Colors.white,
       body: Container(
         padding: EdgeInsets.all(20),

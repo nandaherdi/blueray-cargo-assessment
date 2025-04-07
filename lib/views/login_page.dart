@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                     // onChanged: (_) => authProvider.checkLoginFormValidity(_formKey),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
-                      return authProvider.validateEmail(value);
+                      return context.read<BaseViewModel>().validateEmail(value);
                     },
                   ),
                   TextFormField(

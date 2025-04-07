@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:blueray_cargo_assessment/models/response_model.dart';
 import 'package:blueray_cargo_assessment/models/responses/get_customer_address_model.dart';
+import 'package:blueray_cargo_assessment/models/responses/sub_district_search_model.dart';
 import 'package:blueray_cargo_assessment/services/base_service.dart';
 import 'package:blueray_cargo_assessment/utilities/lookup_utility.dart';
 
@@ -14,6 +17,26 @@ class CustomerAddressService extends BaseService {
       throw '${responseBody.code}: ${responseBody.message}';
     } else {
       return getCustomerAddressModelFromJson(response.body).toList();
+    }
+  }
+
+  static Future<List<SubDistrictSearchModel>> subDistrictSearch(String keyword) async {
+    var response = await BaseService.get(path: "address/subdistricts/search?q=$keyword");
+    ResponseModel responseBody = responseModelFromJson(response.body, 'data', 'status');
+    if (ResponseCodeApi.successResponseCode.where((value) => value == response.statusCode).isEmpty) {
+      throw '${responseBody.code}: ${responseBody.message}';
+    } else {
+      return subDistrictSearchModelFromJson(json.encode(responseBody.value)).toList();
+    }
+  }
+
+  static Future<ResponseModel> validatePostCode(String keyword) async {
+    var response = await BaseService.get(path: "address/postalcode/validation?postal_code=$keyword");
+    ResponseModel responseBody = responseModelFromJson(response.body, 'data', 'status');
+    if (ResponseCodeApi.successResponseCode.where((value) => value == response.statusCode).isEmpty) {
+      throw '${responseBody.code}: ${responseBody.message}';
+    } else {
+      return responseBody;
     }
   }
 }

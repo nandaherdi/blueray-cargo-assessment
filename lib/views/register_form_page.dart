@@ -1,5 +1,6 @@
 import 'package:blueray_cargo_assessment/models/register_mandatory_model.dart';
 import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
+import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/widgets/get_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                             decoration: InputDecoration(hintText: "Nomor Telepon", border: OutlineInputBorder()),
                             //onChanged: (value) => registerProvider.checkFormValidity(_formKey),
                             autovalidateMode: AutovalidateMode.onUserInteraction,
-                            validator: (value) => authProvider.validatePhoneNumber(value),
+                            validator: (value) => context.read<BaseViewModel>().validatePhoneNumber(value),
                           ),
                           TextFormField(
                             controller: _passwordController,

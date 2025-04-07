@@ -157,4 +157,76 @@ class BaseViewModel with ChangeNotifier {
       }
     }
   }
+
+  String? validatePhoneNumber(String? phoneNumber) {
+    if (phoneNumber == null) {
+      return null;
+    } else if (phoneNumber == '') {
+      return 'tolong isi nomor telepon';
+    } else if (RegExp(r"\s").hasMatch(phoneNumber)) {
+      return "nomor telepon tidak boleh mengandung spasi";
+    } else if (!isNumeric(phoneNumber)) {
+      return 'nomor telepon hanya boleh diisi angka';
+    } else if (phoneNumber.length < 10) {
+      return 'nomor telepon minimal 10 digit';
+    } else if (phoneNumber.length > 15) {
+      return 'nomor telepon maksimal 15 digit';
+    }
+    return null;
+  }
+
+  bool isNumeric(String s) {
+    return int.tryParse(s) == null ? false : true;
+  }
+
+  String? validateAddress(String? idCardAddress) {
+    if (idCardAddress == null) {
+      return null;
+    } else if (idCardAddress == '') {
+      return 'tolong isi alamat';
+    } else if (idCardAddress.replaceAll(' ', '').isEmpty) {
+      return "alamat tidak boleh hanya spasi";
+    }
+    return null;
+  }
+
+  String? validateEmail(String? email) {
+    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    if (email == null) {
+      return null;
+    } else if (email == '') {
+      return 'tolong isi email';
+    } else if (!regex.hasMatch(email)) {
+      return 'email tidak valid';
+    }
+    return null;
+  }
+
+  String? validateTaxIDNumber(String? idCardNumber) {
+    if (idCardNumber == null) {
+      return null;
+    } else if (idCardNumber == '') {
+      return 'tolong isi nomor NPWP';
+    } else if (RegExp(r"\s").hasMatch(idCardNumber)) {
+      return "nomor NPWP tidak boleh mengandung spasi";
+    } else if (!isNumeric(idCardNumber)) {
+      return 'nomor NPWP hanya boleh diisi angka';
+    } else if (idCardNumber.length != 16) {
+      return 'nomor NPWP harus 16 digit';
+    }
+    return null;
+  }
+
+  String? validatePlainText(String? text, String formName, int maxChar) {
+    if (text == null) {
+      return null;
+    } else if (text == '') {
+      return 'tolong isi $formName';
+    } else if (text.replaceAll(' ', '').isEmpty) {
+      return "$formName tidak boleh hanya spasi";
+    } else if (text.length > maxChar) {
+      return "$formName maksimal $maxChar karakter";
+    }
+    return null;
+  }
 }

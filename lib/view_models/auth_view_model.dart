@@ -124,27 +124,6 @@ class AuthViewModel with ChangeNotifier {
     });
   }
 
-  bool isNumeric(String s) {
-    return int.tryParse(s) == null ? false : true;
-  }
-
-  String? validatePhoneNumber(String? phoneNumber) {
-    if (phoneNumber == null) {
-      return null;
-    } else if (phoneNumber == '') {
-      return 'tolong isi nomor telepon';
-    } else if (RegExp(r"\s").hasMatch(phoneNumber)) {
-      return "nomor telepon tidak boleh mengandung spasi";
-    } else if (!isNumeric(phoneNumber)) {
-      return 'nomor telepon hanya boleh diisi angka';
-    } else if (phoneNumber.length < 10) {
-      return 'nomor telepon minimal 10 digit';
-    } else if (phoneNumber.length > 15) {
-      return 'nomor telepon maksimal 15 digit';
-    }
-    return null;
-  }
-
   String? validateName(String? name) {
     if (name == null) {
       return null;
@@ -154,18 +133,6 @@ class AuthViewModel with ChangeNotifier {
       return "nama tidak boleh hanya spasi";
     } else if (name.length > 50) {
       return "nama maksimal 50 karakter";
-    }
-    return null;
-  }
-
-  String? validateEmail(String? email) {
-    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    if (email == null) {
-      return null;
-    } else if (email == '') {
-      return 'tolong isi email';
-    } else if (!regex.hasMatch(email)) {
-      return 'email tidak valid';
     }
     return null;
   }
@@ -186,13 +153,14 @@ class AuthViewModel with ChangeNotifier {
   }
 
   String? validateIdCardNumber(String? idCardNumber) {
+    BaseViewModel baseViewModel = BaseViewModel();
     if (idCardNumber == null) {
       return null;
     } else if (idCardNumber == '') {
       return 'tolong isi nomor KTP';
     } else if (RegExp(r"\s").hasMatch(idCardNumber)) {
       return "nomor KTP tidak boleh mengandung spasi";
-    } else if (!isNumeric(idCardNumber)) {
+    } else if (!baseViewModel.isNumeric(idCardNumber)) {
       return 'nomor KTPs hanya boleh diisi angka';
     } else if (idCardNumber.length != 16) {
       return 'nomor KTP harus 16 digit';

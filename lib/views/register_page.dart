@@ -1,4 +1,5 @@
 import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
+import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(hintText: "Masukkan Email"),
                     keyboardType: TextInputType.emailAddress,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) => authProvider.validateEmail(value),
+                    validator: (value) => context.read<BaseViewModel>().validateEmail(value),
                     onChanged: (value) => authProvider.checkEmailValidity(_formKey),
                   ),
                   ElevatedButton(
