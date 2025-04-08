@@ -15,7 +15,7 @@ class GetImageViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  clearProvider() {
+  onStart() {
     tempImage = null;
   }
 

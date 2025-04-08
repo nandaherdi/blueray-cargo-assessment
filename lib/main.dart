@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Blueray Cargo App',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
-      // home: startPage,
-      home: MapsPage(),
+      home: startPage,
+      // home: MapsPage(),
       navigatorKey: navigatorKey,
     );
   }

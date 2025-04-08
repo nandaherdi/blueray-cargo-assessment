@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+String addAddressModelToJson(AddAddressModel data) =>
+    json.encode(data.toJson());
 class AddAddressModel {
   String? name;
   String? phoneNumber;

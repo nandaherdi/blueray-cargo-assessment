@@ -25,6 +25,10 @@ class _MapsPageState extends State<MapsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Column(mainAxisAlignment: MainAxisAlignment.end, spacing: 20, children: [
+        FloatingActionButton(heroTag: 'get position', onPressed: () => context.read<MapsViewModel>().onCurrentLocationTap(mapController), child: Icon(Icons.my_location_sharp),),
+        FloatingActionButton(heroTag: 'done', onPressed: () => context.read<MapsViewModel>().onDone(), child: Icon(Icons.check),),
+      ],),
       appBar: AppBar(title: Text('Select Location'), automaticallyImplyLeading: true, centerTitle: true),
       body: Stack(
         children: [
@@ -53,6 +57,7 @@ class _MapsPageState extends State<MapsPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchAnchor.bar(
+              barHintText: 'search address',
               suggestionsBuilder: (context, controller) async {
                 return context.read<MapsViewModel>().getPrediction(controller.text, controller, mapController);
               },
@@ -60,27 +65,32 @@ class _MapsPageState extends State<MapsPage> {
           ),
           Consumer<MapsViewModel>(
             builder: (context, mapsProvider, _) {
+              // if (!mapsProvider.isMarkMoving && mapsProvider.selectedPrediction != null) {
               if (!mapsProvider.isMarkMoving && mapsProvider.selectedPlacemark != null) {
                 return Positioned(
                   bottom: 0,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 3,
-                    margin: EdgeInsets.all(8),
+                    // margin: EdgeInsets.all(120),
+                    padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 80),
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: 20,
                       children: [
                         Text(
                           mapsProvider.selectedPlacemark!.name!,
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50),
+                          // mapsProvider.selectedPrediction!.primaryText,
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                         ),
                         Text(
-                          '${mapsProvider.selectedPlacemark!.street!}, ${mapsProvider.selectedPlacemark!.locality!}, ${mapsProvider.selectedPlacemark!.country!}',
+                          mapsProvider.selectedPlacemark!.street!,
+                          // mapsProvider.selectedPrediction!.secondaryText
+                          // '${mapsProvider.selectedPlacemark!.street!}, ${mapsProvider.selectedPlacemark!.locality!}, ${mapsProvider.selectedPlacemark!.country!}',
                         ),
-                        Text(mapsProvider.selectedPlacemark!.postalCode!),
+                        // Text(mapsProvider.selectedPlacemark!.postalCode!),
                       ],
                     ),
                   ),

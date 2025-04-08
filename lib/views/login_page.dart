@@ -2,7 +2,9 @@ import 'package:blueray_cargo_assessment/models/requests/login_request_model.dar
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
 import 'package:blueray_cargo_assessment/views/home_page.dart';
+import 'package:blueray_cargo_assessment/views/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -37,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 15,
                 children: [
                   Text("Login"),
                   Text("Anda harus login untuk bisa menggunakan aplikasi ini."),
@@ -86,8 +89,11 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                   ),
-                  Text("Dengan mendaftar anda telah menyetujui"),
-                  Text("Syarat & Ketentuan dan Kebijakan Privasi"),
+                  Text("Belum memiliki akun?"),
+                  TextButton(onPressed: (){
+                    context.pushTransition(type: PageTransitionType.rightToLeft, child: RegisterPage());
+                  }, child: Text('Daftar'))
+                  // Text("Syarat & Ketentuan dan Kebijakan Privasi"),
                 ],
               );
             },

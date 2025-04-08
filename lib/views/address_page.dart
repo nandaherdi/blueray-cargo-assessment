@@ -35,7 +35,7 @@ class _AddressPageState extends State<AddressPage> {
             onPressed: () {
               Navigator.push(
                 navigatorKey.currentContext!,
-                MaterialPageRoute(builder: (BuildContext context) => AddAddressFormPage()),
+                MaterialPageRoute(builder: (BuildContext context) => AddAddressFormPage(title: 'Tambah Alamat',)),
               );
             },
             icon: Icon(Icons.add),
@@ -68,12 +68,12 @@ class _AddressPageState extends State<AddressPage> {
               return Center(child: Text('belum ada alamat'));
             } else {
               return ListView.builder(
-                itemCount: 3,
+                itemCount: customerAddressProvider.customerAddresses!.length,
                 shrinkWrap: true,
                 itemBuilder: (_, index) {
                   return ListTile(
                     title: Text(customerAddressProvider.customerAddresses![index].name),
-                    subtitle: Text(customerAddressProvider.customerAddresses![index].npwpFile),
+                    subtitle: Text(customerAddressProvider.customerAddresses![index].address),
                     trailing: CircleAvatar(
                       radius: 25,
                       backgroundImage: NetworkImage(customerAddressProvider.customerAddresses![index].npwpFile),

@@ -1,3 +1,3 @@
-const String developmentServiceRoot = "https://devuat.blueraycargo.id";
+const String developmentServiceRoot = "link";
 const String developmentDataServiceRoot = "$developmentServiceRoot/api/blueray";
 String dataServiceRoot = developmentDataServiceRoot;

@@ -1,5 +1,7 @@
 import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
+import 'package:blueray_cargo_assessment/widgets/check_email_widget.dart';
+import 'package:blueray_cargo_assessment/widgets/verify_email_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,38 +26,17 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Form(
-          key: _formKey,
-          child: Consumer<AuthViewModel>(
-            builder: (_, authProvider, _) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("Pendaftaran"),
-                  Text("Masukan email anda untuk memulai pendaftaran"),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(hintText: "Masukkan Email"),
-                    keyboardType: TextInputType.emailAddress,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) => context.read<BaseViewModel>().validateEmail(value),
-                    onChanged: (value) => authProvider.checkEmailValidity(_formKey),
-                  ),
-                  ElevatedButton(
-                    onPressed: authProvider.isEmailValid ? () => authProvider.checkEmail(_emailController.text) : null,
-                    child: Text("Daftar Sekarang"),
-                  ),
-                  Text("Dengan mendaftar anda telah menyetujui"),
-                  Text("Syarat & Ketentuan dan Kebijakan Privasi"),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
+      body: Consumer<AuthViewModel>(
+        builder: (context, authProvider, _) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: authProvider.signUpStage == 1
+              ? CheckEmailWidget()
+              : VerifyEmailWidget(email: authProvider.email!)
+          );
+        }
+      )
     );
   }
 }

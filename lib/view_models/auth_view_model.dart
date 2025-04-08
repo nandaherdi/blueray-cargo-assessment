@@ -15,8 +15,9 @@ import 'package:blueray_cargo_assessment/services/customer_table_provider.dart';
 import 'package:blueray_cargo_assessment/services/register_service.dart';
 import 'package:blueray_cargo_assessment/view_models/base_view_model.dart';
 import 'package:blueray_cargo_assessment/view_models/get_image_view_model.dart';
+import 'package:blueray_cargo_assessment/views/login_page.dart';
 import 'package:blueray_cargo_assessment/views/register_form_page.dart';
-import 'package:blueray_cargo_assessment/views/verify_page.dart';
+import 'package:blueray_cargo_assessment/widgets/verify_email_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,8 @@ class AuthViewModel with ChangeNotifier {
   bool _isLoginPasswordVisible = false;
   bool _isEmailValid = false;
   bool _isLoginFormValid = false;
+  int _signUpStage = 1;
+  String? _email;
   // bool _isFormValid = false;
   // bool _isDataReady = false;
 
@@ -34,6 +37,8 @@ class AuthViewModel with ChangeNotifier {
   bool get isLoginPasswordVisible => _isLoginPasswordVisible;
   bool get isEmailValid => _isEmailValid;
   bool get isLoginFormValid => _isLoginFormValid;
+  int get signUpStage => _signUpStage;
+  String? get email => _email;
   // bool get isFormValid => _isFormValid;
   // bool get isDataReady => _isDataReady;
 
@@ -56,6 +61,14 @@ class AuthViewModel with ChangeNotifier {
     _isLoginFormValid = newValue;
     notifyListeners();
   }
+  set signUpStage(int newValue) {
+    _signUpStage = newValue;
+    notifyListeners();
+  }
+  set email(String? newValue) {
+    _email = newValue;
+    notifyListeners();
+  }
   // set isFormValid(bool newValue) {
   //   _isFormValid = newValue;
   //   notifyListeners();
@@ -65,34 +78,32 @@ class AuthViewModel with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future checkEmail(String email) async {
-    RegisterMiniModel requestData = RegisterMiniModel(userId: email);
+  Future checkEmail(String userEmail) async {
+    RegisterMiniModel requestData = RegisterMiniModel(userId: userEmail);
     ResponseModel response = await RegisterService.registerMini(requestData: requestData);
     if (response.action) {
-      Navigator.push(
-        navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (BuildContext context) => VerifyPage(email: email)),
-      );
+      email = userEmail;
+      signUpStage = 2;
     } else {
       baseProvider.showErrorDialog(response.message);
     }
   }
 
-  Future verifyEmail(String email, String code) async {
-    RegisterVerifyCodeModel requestData = RegisterVerifyCodeModel(userId: email, code: code);
+  Future verifyEmail(String userEmail, String code) async {
+    RegisterVerifyCodeModel requestData = RegisterVerifyCodeModel(userId: userEmail, code: code);
     ResponseModel response = await RegisterService.registerVerifyCode(requestData: requestData);
     if (response.action) {
       Navigator.pushReplacement(
         navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (BuildContext context) => RegisterFormPage(email: email)),
+        MaterialPageRoute(builder: (BuildContext context) => RegisterFormPage(email: userEmail)),
       );
     } else {
       baseProvider.showErrorDialog(response.message);
     }
   }
 
-  Future resendCode(String email) async {
-    RegisterResendCodeModel requestData = RegisterResendCodeModel(userId: email);
+  Future resendCode(String userEmail) async {
+    RegisterResendCodeModel requestData = RegisterResendCodeModel(userId: userEmail);
     ResponseModel response = await RegisterService.registerResendCode(requestData: requestData);
     baseProvider.showInfoSnackBar(response.message);
   }
@@ -107,10 +118,10 @@ class AuthViewModel with ChangeNotifier {
             title: "Pendaftaran Berhasil",
             message: "Pendaftaran telah selesai, silahkan login untuk melanjutkan.",
             action: () {
-              // Navigator.pushReplacement(
-              //   navigatorKey.currentContext!,
-              //   MaterialPageRoute(
-              //     builder: (BuildContext context) => LoginPage()));
+              Navigator.pushReplacement(
+                navigatorKey.currentContext!,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => LoginPage()));
             },
             buttonText: "Masuk",
           );
@@ -234,6 +245,7 @@ class AuthViewModel with ChangeNotifier {
       token: response.token!,
       tokenExpiryDate: response.tokenExpiryDate!,
     );
+    authToken = response.token!;
     await authTableProvider.insertData(authData);
     await customerTableProvider.insertData(response.customer!);
   }

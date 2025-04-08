@@ -13,6 +13,11 @@ class GetImageWidget extends StatefulWidget {
 
 class _GetImageWidgetState extends State<GetImageWidget> {
   @override
+  void initState() {
+    Future.microtask(() => context.read<GetImageViewModel>().onStart());
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,

@@ -14,20 +14,33 @@ class BaseService {
     // required String statusCodeKey,
     required Object requestData,
   }) async {
-    final authToken = navigatorKey.currentContext!.read<BaseViewModel>().authToken;
+    // final authToken = navigatorKey.currentContext!.read<BaseViewModel>().authToken;
     final accessToken = navigatorKey.currentContext!.read<BaseViewModel>().accessToken;
     var url = Uri.parse("$dataServiceRoot/$path");
-    var response = await http.post(
-      url,
-      headers: {
-        "Authorization": authToken ?? "",
-        "AccessToken": accessToken,
-        "Content-Type": "application/json; charset=UTF-8",
-        "Accept": "application/json",
-      },
-      body: requestData,
-    );
-    return response;
+    if (path.contains('login')) {
+      var response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Accept": "application/json",
+        },
+        body: requestData,
+      );
+      return response;
+    } else {
+      var response = await http.post(
+        url,
+        headers: {
+          "Authorization": "Token $authToken" ?? "",
+          "AccessToken": accessToken,
+          "Content-Type": "application/json; charset=UTF-8",
+          "Accept": "application/json",
+        },
+        body: requestData,
+      );
+      return response;
+    }
+    
   }
 
   static Future<http.Response> get({

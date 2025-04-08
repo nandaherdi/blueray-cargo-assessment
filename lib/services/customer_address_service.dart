@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blueray_cargo_assessment/models/requests/add_address_model.dart';
 import 'package:blueray_cargo_assessment/models/response_model.dart';
 import 'package:blueray_cargo_assessment/models/responses/get_customer_address_model.dart';
 import 'package:blueray_cargo_assessment/models/responses/sub_district_search_model.dart';
@@ -37,6 +38,22 @@ class CustomerAddressService extends BaseService {
       throw '${responseBody.code}: ${responseBody.message}';
     } else {
       return responseBody;
+    }
+  }
+
+  static Future<ResponseModel> saveAddress({required AddAddressModel requestData}) async {
+    String loginRequest = addAddressModelToJson(requestData);
+    var response = await BaseService.post(path: "$_path/address", requestData: loginRequest);
+    ResponseModel saveAddressResponse;
+    try {
+      saveAddressResponse = responseModelFromJson(response.body, '', '');
+    } catch (_) {
+      throw "${response.statusCode}: ${response.reasonPhrase}";
+    }
+    if (saveAddressResponse.action) {
+      return saveAddressResponse;
+    } else {
+      throw saveAddressResponse.message;
     }
   }
 }

@@ -37,25 +37,25 @@ class RegisterMandatoryModel {
           Map<String, dynamic> json) =>
       RegisterMandatoryModel(
         userId: json["user_id"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        secondUserId: json["secondUserId"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        secondUserId: json["second_user_id"],
         password: json["password"],
-        idCardNumber: json["idCardNumber"],
-        idCardImage: json["idCardImage"],
-        idCardAddress: json["idCardAddress"],
-        idCardName: json["idCardName"]
+        idCardNumber: json["id_card_number"],
+        idCardImage: json["id_card_image"],
+        idCardAddress: json["id_card_address"],
+        idCardName: json["id_card_name"]
       );
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
-        "firstName": firstName,
-        "lastName": lastName,
-        "secondUserId": secondUserId,
+        "first_name": firstName,
+        "last_name": lastName,
+        "second_user_id": secondUserId,
         "password": password,
-        "idCardNumber": idCardNumber,
-        "idCardImage": idCardImage,
-        "idCardAddress": idCardAddress,
-        "idCardName": idCardName
+        "id_card_number": idCardNumber,
+        "id_card_image": idCardImage,
+        "id_card_address": idCardAddress,
+        "id_card_name": idCardName
       };
 }
