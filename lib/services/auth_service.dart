@@ -4,7 +4,6 @@ import 'package:blueray_cargo_assessment/services/base_service.dart';
 
 class AuthService extends BaseService {
   static String get _path => "customer";
-  static String get _valueKey => "customer";
 
   static Future<LoginResponseModel> login({required LoginRequestModel requestData}) async {
     String loginRequest = loginRequestModelToJson(requestData);

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:blueray_cargo_assessment/global.dart';
 import 'package:blueray_cargo_assessment/models/authorization_model.dart';
-import 'package:blueray_cargo_assessment/models/customer_model.dart';
 import 'package:blueray_cargo_assessment/models/register_mandatory_model.dart';
 import 'package:blueray_cargo_assessment/models/register_mini_model.dart';
 import 'package:blueray_cargo_assessment/models/register_resend_code_model.dart';

@@ -1,13 +1,9 @@
 import 'dart:io';
 
 import 'package:blueray_cargo_assessment/global.dart';
-import 'package:blueray_cargo_assessment/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class GetImageViewModel with ChangeNotifier {
   String? _tempImage;
@@ -160,7 +156,7 @@ class GetImageViewModel with ChangeNotifier {
   }
 
   Future<XFile?> useCamera() async {
-    final Directory appSupportDirectory = await getApplicationSupportDirectory();
+    // final Directory appSupportDirectory = await getApplicationSupportDirectory();
     ImagePicker picker = ImagePicker();
     XFile? photo = await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     if (photo != null) {
